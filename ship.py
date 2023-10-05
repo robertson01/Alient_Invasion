@@ -2,7 +2,6 @@ import pygame
 
 class Ship:
     """Класс для управления кораблем"""
-
     def __init__(self, ai_game):
         """Инициализирует корабль и задает его начальную позицию"""
         self.screen = ai_game.screen
@@ -11,7 +10,7 @@ class Ship:
         
 
         # Загружает изображение корабля и получает прямоугольник.
-        self.image = pygame.image.load('alien_invasion/images/ship.bmp')
+        self.image = pygame.image.load('images/ship.bmp')
         self.rect = self.image.get_rect()
         # Каждый новый корабль появляется у нижнего края экрана
         self.rect.midbottom = self.screen_rect.midbottom
