@@ -13,13 +13,18 @@ class Ship:
         self.rect = self.image.get_rect()
         # Каждый новый корабль появляется у нижнего края экрана
         self.rect.midbottom = self.screen_rect.midbottom
-        # Флаг перемещения
-        self.moving_right = False 
+        # Флаги перемещения
+        self.moving_right = False
+        self.moving_left = False
+        
         
     def update(self):
         """Обновление позии корабля с учетом флага"""
         if self.moving_right:
             self.rect.x += 1
+        if self.moving_left:
+            self.rect.x -= 1
+        
 
     def blitme(self):
         """Рисует корабль в текущей позиции."""
