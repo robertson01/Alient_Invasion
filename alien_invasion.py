@@ -30,14 +30,9 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
+            self._update_bullets()
             self._update_screen()
-            self.bullets.update()
 
-            # Удаление снарядов, вышедших за край экрана.
-            for bullet in self.bullets.copy():
-                if bullet.rect.bottom <= 0:
-                    self.bullets.remove(bullet)
-            print(len(self.bullets))
     def _check_events(self):
         """Обрабатывает нажатия клавиш и события мыши."""
         for event in pygame.event.get():
@@ -58,6 +53,15 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+
+    def _update_bullets(self):
+        """Обновляет позиции снарядов и уничтожает старые снаряды."""
+        # Обновление позиции снарядов
+        self.bullets.update()
+        # Удаление снарядов, вышедших за край экрана.
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
