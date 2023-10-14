@@ -139,11 +139,27 @@ class AlienInvasion:
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
+    def _ship_hit(self):
+        """Обрабатывает столкновение корабля с пришельцем"""
+        # Уменьшение ship_left
+        self.stats.ships_left -= 1
+
+        # Очистка списков пришельцев и снарядов.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Создание нового флота и размещение корабля в центре.
+        self._create_fleet()
+        self.ship._center_ship()
+
+        # Пауза
+        sleep(0.5)
+
     def _update_aliens(self):
         """Обновляет позиции всех пришельцев во флоте."""
         self.aliens.update()
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            print("Ship hit!!!")
+            self._ship_hit()
         self._check_fleet_edges()
 
     def _update_screen(self):
