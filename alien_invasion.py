@@ -1,10 +1,13 @@
 import sys
+from time import sleep
+
 import pygame
 
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
 
 
 class AlienInvasion:
@@ -23,6 +26,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
+        # Создание экземпляра для хранения игровой статистики.
+        self.stats = GameStats(self)
+
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -71,13 +77,13 @@ class AlienInvasion:
         self._check_bullet_alien_collisions()
 
     def _check_bullet_alien_collisions(self):
-            """Обработка коллизий снарядов с пришельцами."""
-            # Удаление снарядов и пришельцев, участвующих в коллизиях.
-            collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
-            if not self.aliens:
-                # Уничтожение существующих снарядов и создание нового флота.
-                self.bullets.empty()
-                self._create_fleet()
+        """Обработка коллизий снарядов с пришельцами"""
+        # Удаление снарядов и пришельцев, участвующих в коллизиях.
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if not self.aliens:
+            # Уничтожение существующих снарядов и создание нового флота.
+            self.bullets.empty()
+            self._create_fleet()
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
@@ -136,6 +142,8 @@ class AlienInvasion:
     def _update_aliens(self):
         """Обновляет позиции всех пришельцев во флоте."""
         self.aliens.update()
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            print("Ship hit!!!")
         self._check_fleet_edges()
 
     def _update_screen(self):
