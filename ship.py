@@ -29,9 +29,9 @@ class Ship:
 
         # Обновляется атрибут x, не rect
         if self.moving_right and self.rect.right < self.screen_rect.right:
-            self.x += self.settings.ship_speed
+            self.x += self.settings.ship_speed_factor
         if self.moving_left and self.rect.left > 0:
-            self.x -= self.settings.ship_speed
+            self.x -= self.settings.ship_speed_factor
 
         # Обновление атрибута rect на основе self.x.
         self.rect.x = self.x
