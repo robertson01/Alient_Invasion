@@ -71,7 +71,8 @@ class AlienInvasion:
         if button_clicked and not self.stats.game_active:
             self.settings.initialize_dynamic_settings()
             self.start_game()
-            self.sb.prep_score()
+
+            self.sb.prep_level()
 
     def start_game(self):
         # Сброс игровой статистики
@@ -120,12 +121,14 @@ class AlienInvasion:
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
             self.sb.check_high_score()
-
         if not self.aliens:
             # Уничтожение существующих снарядов и создание нового флота.
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            # Увеличение уровня.
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
