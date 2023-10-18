@@ -12,7 +12,6 @@ from scoreboard import Scoreboard
 from button import Button
 
 
-
 class AlienInvasion:
     """Класс для управления ресурсами и поведением игры."""
 
@@ -56,6 +55,7 @@ class AlienInvasion:
         """Обрабатывает нажатия клавиш и события мыши."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.stats.write_high_score()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
@@ -71,8 +71,8 @@ class AlienInvasion:
         if button_clicked and not self.stats.game_active:
             self.settings.initialize_dynamic_settings()
             self.start_game()
-
             self.sb.prep_level()
+            self.sb.prep_ships()
 
     def start_game(self):
         # Сброс игровой статистики
@@ -95,6 +95,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
+            self.stats.write_high_score()
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
@@ -189,6 +190,7 @@ class AlienInvasion:
         if self.stats.ships_left > 0:
             # Уменьшение ship_left
             self.stats.ships_left -= 1
+            self.sb.prep_ships()
             # Пауза
             sleep(0.5)
         else:
