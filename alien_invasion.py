@@ -66,18 +66,21 @@ class AlienInvasion:
         """Запускает новую игру при нажатии кнопки Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
-            # Сброс игровой статистики
-            self.stats.reset_stats()
-            self.stats.game_active = True
-            # Очистка списков пришельцев и снарядов.
-            self.aliens.empty()
-            self.bullets.empty()
+            self.start_game()
 
-            # Создание нового флота и размещение корабля в центре.
-            self._create_fleet()
-            self.ship._center_ship()
-            # Указатель мыши скрывается.
-            pygame.mouse.set_visible(False)
+    def start_game(self):
+        # Сброс игровой статистики
+        self.stats.reset_stats()
+        self.stats.game_active = True
+        # Очистка списков пришельцев и снарядов.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Создание нового флота и размещение корабля в центре.
+        self._create_fleet()
+        self.ship._center_ship()
+        # Указатель мыши скрывается.
+        pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         """Реагирует на нажатие клавиш"""
@@ -89,6 +92,8 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_p and not self.stats.game_active:
+            self.start_game()
 
     def _update_bullets(self):
         """Обновляет позиции снарядов и уничтожает старые снаряды."""
