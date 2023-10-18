@@ -8,7 +8,9 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
+
 
 
 class AlienInvasion:
@@ -27,8 +29,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
-        # Создание экземпляра для хранения игровой статистики.
+        # Создание экземпляра для хранения игровой статистики и панель результатов.
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
         # Создание кнопки Play.
         self.play_button = Button(self, "Play")
         self.ship = Ship(self)
@@ -68,6 +71,7 @@ class AlienInvasion:
         if button_clicked and not self.stats.game_active:
             self.settings.initialize_dynamic_settings()
             self.start_game()
+            self.sb.prep_score()
 
     def start_game(self):
         # Сброс игровой статистики
@@ -111,6 +115,11 @@ class AlienInvasion:
         """Обработка коллизий снарядов с пришельцами"""
         # Удаление снарядов и пришельцев, участвующих в коллизиях.
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+
         if not self.aliens:
             # Уничтожение существующих снарядов и создание нового флота.
             self.bullets.empty()
@@ -215,6 +224,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        self.sb.show_score()
         # Кнопка Play отображается в том случае, если игра неактивна.
         if not self.stats.game_active:
             self.play_button.draw_button()
